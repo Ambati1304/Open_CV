@@ -16,7 +16,23 @@ Mat  detectedMask;
 
 void Xmlparsing::readFile(string filename,Mat mask) {
 
-		
+	//read the xml document into file object
+	detectedMask = mask;
+	double threshold = 50;
+	xml_document<> doc;
+	ifstream file(filename);
+	stringstream buffer;
+	cout << filename;
+	if (file.is_open())
+	{
+
+		buffer << file.rdbuf();
+		file.close();
+	}
+	else {
+		cout << endl << "Unable to open file" << endl;
+		exit(0);
+	}
 
 		}
 
