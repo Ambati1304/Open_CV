@@ -112,5 +112,13 @@ void Xmlparsing::readFile(string filename,Mat mask) {
 
 	double Xmlparsing::test(RotatedRect annotBox) {
 		
-			
+		Mat temp(detectedMask.size(), CV_8UC1, Scalar::all(0));
+		//detectedMask.copyTo(temp(annotBox));
+		Mat M, rotated, cropped;
+		M = getRotationMatrix2D(annotBox.center, annotBox.angle, 1.0);
+		warpAffine(detectedMask, rotated, M, detectedMask.size(), INTER_CUBIC);
+		getRectSubPix(rotated, annotBox.size, annotBox.center, cropped);
+		double pixelSum = cv::sum(cropped)[0];
+		double occupancy = pixelSum / (cropped.total() * 255) * 100;
+		return occupancy;
 	}
