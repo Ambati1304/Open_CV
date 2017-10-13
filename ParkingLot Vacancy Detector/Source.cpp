@@ -23,6 +23,22 @@ public:	    //variables kept public but precaution taken all over the code
 	CascadeClassifier cascade;    //the main cascade classifier
 	CascadeClassifier checkcascade;
 
+	void getimage(Mat src) //getting the input image
+	{
 
+		if (!src.data)
+		{
+			cout << "src not filled" << endl;
+		}
+
+		else
+		{
+			image_input = src.clone();
+			storage = src.clone();              //initialising storage
+			image_main_result = src.clone();    //initialising result
+
+			cout << "got image" << endl;
+		}
+	}
 
 }
