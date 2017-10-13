@@ -40,5 +40,20 @@ public:	    //variables kept public but precaution taken all over the code
 			cout << "got image" << endl;
 		}
 	}
+	void cascade_load(string cascade_string)            //loading the main cascade
+	{
+		cascade.load(cascade_string);
 
+		if (!cascade.load(cascade_string))
+		{
+			cout << endl << "Could not load classifier cascade" << endl;
+
+		}
+		else
+		{
+
+			cout << "cascade : " << cascade_string << " loaded" << endl;
+		}
+
+	}
 }
