@@ -119,3 +119,27 @@ public:	    //variables kept public but precaution taken all over the code
 
 
 };
+
+int main(int argc, char** argv)
+{
+
+	Mat image;
+	string image_name = "2013-03-13_13_25_08";
+	image = imread(image_name + ".jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
+	Cars_detector detector;
+	if (!image.data)                              // Check for invalid input
+	{
+		cout << "Could not open or find the image" << std::endl;
+		return -1;
+	}
+	string xmlPath = "caslbp.xml";
+	detector.getimage(image);
+	detector.cascade_load(xmlPath);
+	Mat mask = detector.findcars();
+
+	detector.display_output();
+	Xmlparsing xp;
+	xp.readFile(image_name + ".xml", mask);
+	waitKey(0);                                          // Wait for a keystroke in the window
+	return 0;
+}
