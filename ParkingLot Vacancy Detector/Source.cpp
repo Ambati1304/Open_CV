@@ -102,7 +102,20 @@ public:	    //variables kept public but precaution taken all over the code
 		return mask;
 	}
 
+	void display_output()            //function to display output
+	{
 
+		if (!image_main_result.empty())
+		{
+			namedWindow("display_output");
+			imshow("display_output", image_main_result);
+			//waitKey(0);
+		}
+		else
+		{
+			cout << "empty image" << endl;
+		}
+	}
 
 
 }
