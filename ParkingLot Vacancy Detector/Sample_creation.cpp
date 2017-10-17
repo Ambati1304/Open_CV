@@ -67,3 +67,72 @@ void getFiles(fs::path root)
 	}
 
 }
+
+void readFile(const fs::path filename, fs::path jpgfilename) {
+
+	//read the xml document into file object
+	xml_document<> doc;
+	ifstream file(filename.string());
+	stringstream buffer;
+	buffer << file.rdbuf();
+	file.close();
+
+	//parse the document
+	string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+	string line;
+	ostringstream image_oss, oss_neg, oss_pos;
+	string image_path = jpgfilename.string();
+	string current_path = boost::filesystem::current_path().string();
+	image_path = image_path.substr(current_path.length() - 1, image_path.length());
+	image_oss << image_path << " ";
+	int pos_count = 0;
+	int neg_count = 0;
+	xml_node<> *pRoot = doc.first_node();
+	for (xml_node<> *pNode = pRoot->first_node("space"); pNode; pNode = pNode->next_sibling())
+	{
+
+		int occupied1 = 0, nValue = 0, width1 = 0, height1 = 0, x_point = 0, y_point = 0;
+		char line[30] = "\0";
+		xml_node<> *rotatedRect = pNode->first_node("rotatedRect");
+		xml_attribute<> *occupied = pNode->first_attribute("occupied");
+		xml_node<> *center_node = rotatedRect->first_node("center");
+		xml_node<> *size = rotatedRect->first_node("size");
+		xml_attribute<> *width = size->first_attribute("w");
+		xml_attribute<> *height = size->first_attribute("h");
+		xml_attribute<> *pAttr = center_node->first_attribute("y");
+		xml_node<> *contour_node = pNode->first_node("contour");
+		xml_node<> *points = contour_node->first_node("point");
+		xml_attribute<> *x = points->first_attribute("x");
+		xml_attribute<> *y = points->first_attribute("y");
+
+		if (occupied != nullptr && pAttr != nullptr&&width != nullptr&&height != nullptr&&x != nullptr&&y != nullptr) {
+			occupied1 = atoi(occupied->value());
+			nValue = atoi(pAttr->value());
+			width1 = atoi(width->value());
+			height1 = atoi(height->value());
+			x_point = atoi(x->value());
+			y_point = atoi(y->value());
+		}
+		if (occupied1 == 1) {
+			pos_count++;
+			oss_pos << width1 << " " << height1 << " " << x_point << " " << y_point << " ";
+		}
+		else
+		{
+			neg_count++;
+			oss_neg << width1 << " " << height1 << " " << x_point << " " << y_point << " ";
+		}
+
+
+	}
+	if (pos_count > 0)
+		pos_training_set << image_oss.str() << pos_count << " " << oss_pos.str() << endl;
+	if (neg_count>0)
+	{
+		neg_training_set << image_oss.str() << neg_count << " " << oss_neg.str() << endl;
+	}
+
+}
+
