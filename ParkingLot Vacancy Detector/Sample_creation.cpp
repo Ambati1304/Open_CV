@@ -34,3 +34,36 @@ int main() {
 	neg_training_set.close();
 	return 0;
 }
+
+void getFiles(fs::path root)
+{
+	string ext = ".jpg";
+	vector<fs::path> jpgPaths, xmlPaths;
+	if (!fs::exists(root) || !fs::is_directory(root)) cout << "";
+
+	fs::recursive_directory_iterator it(root);
+	fs::recursive_directory_iterator endit;
+
+	while (it != endit)
+	{
+
+		if (fs::is_regular_file(*it))
+		{
+			if (it->path().extension() == ".xml")
+				xmlPaths.push_back(it->path());
+			if (it->path().extension() == ".jpg")
+				jpgPaths.push_back(it->path());
+		}
+		++it;
+
+	}
+
+
+	for (int i = 0; i <xmlPaths.size(); i++)
+	{
+
+		readFile(xmlPaths[i], jpgPaths[i]);
+
+	}
+
+}
