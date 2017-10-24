@@ -109,4 +109,13 @@ def Transformation(points1, points2):
                                        c2.T - (s2 / s1) * R * c1.T)),
                          numpy.matrix([0., 0., 1.])])
 
+# In[98]:
+
+class TooManyFaces(Exception):
+    pass
+
+class NoFaces(Exception):
+    pass
+
+
 
