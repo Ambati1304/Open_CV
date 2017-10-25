@@ -117,5 +117,32 @@ class TooManyFaces(Exception):
 class NoFaces(Exception):
     pass
 
+# In[99]:
+
+def getFaceMask(im, landmarks):
+    im = numpy.zeros(im.shape[:2], dtype=numpy.float64)
+
+    for group in OVERLAY_POINTS:
+    #for group in FACE_POINTS:
+        drawConvexHull(im,
+                         landmarks[group],
+                         color=1)
+    
+    im = numpy.array([im, im, im]).transpose((1, 2, 0))
+
+    im = (cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0) > 0) * 1.0
+    im = cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0)
+    
+    return im
+
+def imageWarp(im, M, dshape):
+    output_im = numpy.zeros(dshape, dtype=im.dtype)
+    cv2.warpAffine(im,
+                   M[:2],
+                   (dshape[1], dshape[0]),
+                   dst=output_im,
+                   borderMode=cv2.BORDER_TRANSPARENT,
+                   flags=cv2.WARP_INVERSE_MAP)
+    return output_im
 
 
