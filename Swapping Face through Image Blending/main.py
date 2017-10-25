@@ -145,4 +145,52 @@ def imageWarp(im, M, dshape):
                    flags=cv2.WARP_INVERSE_MAP)
     return output_im
 
+# In[100]:
+
+def faceSwap(image1,image2):
+    
+    image1, landmarks1 = readImageAndLandmarks(image1)
+    image2, landmarks2 = readImageAndLandmarks(image2)
+
+    M = Transformation(landmarks1[ALIGN_POINTS],
+                              landmarks2[ALIGN_POINTS])
+    
+    #M = Transformation(landmarks1[FACE_POINTS],
+     #                             landmarks2[FACE_POINTS])
+
+    mask = getFaceMask(image2, landmarks2)
+
+    plt.imshow(mask, interpolation='nearest')
+    plt.savefig("mask1.jpg")
+
+    
+    maskWarp = imageWarp(mask, M, image1.shape)
+    #combinedMask = numpy.max([getFaceMask(image1, landmarks1), mask],axis=0)
+    
+    plt.imshow(maskWarp, interpolation='nearest')
+    plt.savefig("mask2.jpg")
+    
+    combinedMask = numpy.max([getFaceMask(image1, landmarks1), maskWarp],
+                          axis=0)
+
+    plt.imshow(combinedMask, interpolation='nearest')
+    plt.show()
+    
+    image2Warp = imageWarp(image2, M, image1.shape)
+    correctedWarp = colorCohesion(image1, image2Warp, landmarks1)
+    
+    plt.imshow(correctedWarp, interpolation='nearest')
+    plt.show()
+    
+    correctedWarp = colorCohesion(image1, image2Warp, landmarks1)
+
+    swappedImage = image1 * (1.0 - combinedMask) + correctedWarp * combinedMask
+
+    cv2.imwrite('output5.jpg', swappedImage)
+
+
+# In[101]:
+
+faceSwap("face.jpg","face2.jpg")
+
 
