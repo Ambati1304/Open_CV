@@ -26,9 +26,23 @@ int main(int argc, char** argv)
 		system("pause");
 		return 0;
 	}
-
-
-	return 0;
+	facialdetection(inputImage);
+	cvShowImage("Detected Face", inputImage);
+	cvReleaseImage(&inputImage);
+	cvWaitKey(0);
+	char memorybuffer[20];
+	for (imgnum = 0; imgnum <= fiximagesnumber; imgnum++)
+	{
+		sprintf_s(memorybuffer, "MyInputs/P%04d.bmp", imgnum);
+		printf("\n");
+		inputImage = cvLoadImage(memorybuffer, CV_LOAD_IMAGE_UNCHANGED);
+		printf("Input Image = P%04d.bmp\n", imgnum);
+		facialdetection(inputImage);
+		cvShowImage("Face Detection", inputImage);
+		cvReleaseImage(&inputImage);
+		value = cvWaitKey(0);
+		if (value == 'e' || value == 'E')
+			return 0;
 }
 
 
