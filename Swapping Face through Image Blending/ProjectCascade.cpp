@@ -8,7 +8,11 @@ int value;
 int imgnum;
 int fiximagesnumber = 20;
 
-
+int main(int argc, char** argv)
+{
+	
+	return 0;
+}
 
 
 void facialdetection(IplImage *faceframe)
