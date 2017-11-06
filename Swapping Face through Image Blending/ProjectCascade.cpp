@@ -10,7 +10,14 @@ int fiximagesnumber = 20;
 
 int main(int argc, char** argv)
 {
-	
+	string RootCascade = "MyCascades/";
+	string Extension = ".xml";
+	string filename = RootCascade + "myfaced" + Extension;
+	facecascade = (CvHaarClassifierCascade*)cvLoad(filename.c_str());
+	memory = cvCreateMemStorage(0);
+	IplImage* inputImage = cvLoadImage("MyInputs/GT.jpg", 1);
+
+
 	return 0;
 }
 
