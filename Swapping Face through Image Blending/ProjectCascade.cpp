@@ -17,6 +17,16 @@ int main(int argc, char** argv)
 	memory = cvCreateMemStorage(0);
 	IplImage* inputImage = cvLoadImage("MyInputs/GT.jpg", 1);
 
+	if (!facecascade || !memory || !inputImage)
+	{
+		printf("Initialization Failed: %s\n",
+			(!facecascade) ? " describe cascade not found !\n" :
+			(!memory) ? " Sufficient Memory not allocated !\n" :
+			" The input file can not be found!\n");
+		system("pause");
+		return 0;
+	}
+
 
 	return 0;
 }
